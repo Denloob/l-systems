@@ -23,3 +23,11 @@ void *xmalloc(size_t size)
         die("malloc: %s", strerror(errno));
     return p;
 }
+
+void *xrealloc(void *ptr, size_t size)
+{
+    void *p = realloc(ptr, size);
+    if (!p)
+        die("realloc: %s", strerror(errno));
+    return p;
+}
