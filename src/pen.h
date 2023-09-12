@@ -8,7 +8,9 @@ typedef struct Pen
     SDL_Renderer *renderer;
     SDL_FPoint pos;
     double rotation_rad; /* Pen rotation in radians.
-                           0 is to the left, + is up. */
+                            0 is to the right.
+                            Adding will rotate right.
+                            Subtracting will rotate left.*/
     SDL_Color color;
     bool down;
 } Pen;
