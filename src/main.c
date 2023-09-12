@@ -1,5 +1,8 @@
 #include "SDL.h"
+#include "config.h"
+#include "l_system.h"
 #include "main.h"
+#include "pen.h"
 #include "utils.h"
 
 int main(int argc __attribute__((unused)), char *argv[] __attribute__((unused)))
@@ -8,6 +11,11 @@ int main(int argc __attribute__((unused)), char *argv[] __attribute__((unused)))
     SDL_Renderer *renderer = NULL;
 
     init_sdl(&window, &renderer);
+    Config *config = config_create(renderer);
+
+    config_execute(config);
+
+    config_destroy(config);
     quit_sdl(window, renderer);
 
     return EXIT_SUCCESS;
