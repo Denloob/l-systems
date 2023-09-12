@@ -69,6 +69,10 @@ void pen_commands_execute(Pen *pen, const PenCommandRegistry registry,
 {
     for (const char *command = commands; *command; command++)
     {
-        registry[(int)*command](pen);
+        PenCommand pen_command = registry[(int)*command];
+        if (pen_command)
+        {
+            pen_command(pen);
+        }
     }
 }
