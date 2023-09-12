@@ -2,7 +2,7 @@ SRC_DIR = src
 BIN_DIR = bin
 DEP_DIR = .deps
 
-LIBS = sdl2 SDL2_gfx
+LIBS = sdl2
 
 CC = gcc
 CFLAGS = -g -Wall -Wextra -std=gnu2x $(shell pkg-config --cflags $(LIBS)) -I$(SRC_DIR)

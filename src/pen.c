@@ -1,5 +1,4 @@
 #include "SDL.h"
-#include "SDL2_gfxPrimitives.h"
 #include "pen.h"
 #include "utils.h"
 #include <string.h>
@@ -14,8 +13,8 @@ void pen_move_forward(Pen *pen, float amount)
     if (pen->down)
     {
         SDL_Color color = pen->color;
-        lineRGBA(pen->renderer, pen->pos.x, pen->pos.y, dest.x, dest.y, color.r,
-                 color.g, color.b, color.a);
+        SDL_SetRenderDrawColor(pen->renderer, color.r, color.g, color.b, color.a);
+        SDL_RenderDrawLineF(pen->renderer, pen->pos.x, pen->pos.y, dest.x, dest.y);
     }
 
     pen->pos = dest;
