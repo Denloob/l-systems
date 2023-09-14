@@ -11,7 +11,7 @@
 Configs can be found in the [examples](./examples/) folder.
 
 ## Compiling
-To compile the project you will need `SDL2` installed and configured in `pkg-config`.
+To compile the project you will need `SDL2` and `SDL2_gfx` installed and configured in `pkg-config`.
 
 After that run
 ```sh
