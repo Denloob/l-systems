@@ -20,6 +20,24 @@ void pen_move_forward(Pen *pen, float amount)
     pen->pos = dest;
 }
 
+void pen_position_save(Pen *pen)
+{
+    PenPosition *position = xmalloc(sizeof(*position));
+    position->pos = pen->pos;
+    position->rotation_rad = pen->rotation_rad;
+
+    stack_push(&pen->position_stack, position);
+}
+
+void pen_position_restore(Pen *pen)
+{
+    PenPosition *position = stack_pop(&pen->position_stack);
+    pen->pos = position->pos;
+    pen->rotation_rad = position->rotation_rad;
+
+    free(position);
+}
+
 PenCommandRegistry pen_command_registry_create()
 {
     PenCommandRegistry registry =

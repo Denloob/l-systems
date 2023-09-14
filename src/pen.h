@@ -1,10 +1,19 @@
 #pragma once
 
 #include "SDL.h"
+#include "stack.h"
 #include <stdbool.h>
+
+typedef struct PenPosition
+{
+    SDL_FPoint pos;
+    double rotation_rad;
+} PenPosition;
 
 typedef struct Pen
 {
+    Stack *position_stack; /* Stack of PenPosition.
+                              NULL means empty.*/
     SDL_Renderer *renderer;
     SDL_FPoint pos;
     double rotation_rad; /* Pen rotation in radians.
@@ -25,6 +34,16 @@ typedef PenCommand *PenCommandRegistry;
  * @param amount The amount by which to move the pen forward.
  */
 void pen_move_forward(Pen *pen, float amount);
+
+/**
+ * @brief Saves the current pen position onto the pen position stack.
+ */
+void pen_position_save(Pen *pen);
+
+/**
+ * @brief Restores the pen position from the pen position stack.
+ */
+void pen_position_restore(Pen *pen);
 
 /**
  * @brief Creates a registry for pen commands.
