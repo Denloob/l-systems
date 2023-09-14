@@ -1,4 +1,5 @@
 #include "SDL.h"
+#include "SDL_assert.h"
 #include "pen.h"
 #include "utils.h"
 #include <string.h>
@@ -32,6 +33,8 @@ void pen_position_save(Pen *pen)
 void pen_position_restore(Pen *pen)
 {
     PenPosition *position = stack_pop(&pen->position_stack);
+    SDL_assert_always(position != NULL &&
+                      "Restoring position from empty stack.");
     pen->pos = position->pos;
     pen->rotation_rad = position->rotation_rad;
 
