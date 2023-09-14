@@ -76,6 +76,7 @@ void config_execute(Config *config)
     SDL_RenderClear(config->pen.renderer);
 
     pen_commands_execute(&config->pen, config->registry, curve);
+    free(curve);
 
     SDL_RenderPresent(config->pen.renderer);
 
