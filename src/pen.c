@@ -32,7 +32,7 @@ void pen_state_save(Pen *pen)
     stack_push(&pen->position_stack, state);
 }
 
-void pen_position_restore(Pen *pen)
+void pen_state_restore(Pen *pen)
 {
     PenState *state = stack_pop(&pen->position_stack);
     SDL_assert_always(state != NULL && "Restoring position from empty stack.");

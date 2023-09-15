@@ -45,7 +45,7 @@ void pen_state_save(Pen *pen);
 /**
  * @brief Restores the pen position from the pen position stack.
  */
-void pen_position_restore(Pen *pen);
+void pen_state_restore(Pen *pen);
 
 /**
  * @brief Creates a registry for pen commands.
