@@ -6,6 +6,8 @@
     <img src="./images/dragon_curve.png" alt="Image of the Dragon Curve" width="250" height="250">
     <img src="./images/koch_curve.png" alt="Image of the Koch Curve" width="250" height="250">
     <img src="./images/sierpinski_triangle.png" alt="Image of the Sierpinski Triangle" width="250" height="250">
+    <img src="./images/fractal_plant.png" alt="Image of a fractal plant" width="250" height="250">
+    <img src="./images/tree.png" alt="Image of a tree" width="250" height="250">
 </div>
 
 Configs can be found in the [examples](./examples/) folder.
