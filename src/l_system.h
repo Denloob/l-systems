@@ -1,9 +1,21 @@
 #pragma once
 
+typedef enum RuleType
+{
+    RULE_TYPE_STRING,
+    RULE_TYPE_FUNCTION
+} RuleType;
+typedef const char *(*RuleFunction)();
+
 typedef struct Rule
 {
+    RuleType type;
     char from;
-    char *to;
+    union
+    {
+        char *string;
+        RuleFunction func;
+    } to;
 } Rule;
 
 /**

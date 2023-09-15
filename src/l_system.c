@@ -13,17 +13,24 @@ char *l_system_apply_rules(const char *string, const Rule *rules, int size)
     char ch = 0;
     while ((ch = *string++))
     {
-        char *target = &ch;
+        const char *target = &ch;
         size_t target_len = 1;
 
         for (const Rule *rule = rules; rule < rules + size; rule++)
         {
-            if (rule->from == ch)
+            if (rule->from != ch)
+                continue;
+
+            switch (rule->type)
             {
-                target = rule->to;
-                target_len = strlen(rule->to);
-                break;
+                case RULE_TYPE_STRING:
+                    target = rule->to.string;
+                    break;
+                case RULE_TYPE_FUNCTION:
+                    target = rule->to.func();
+                    break;
             }
+            target_len = strlen(target);
         }
 
         while (allocated <= strlen(res) + target_len)

@@ -22,7 +22,7 @@ void left(Pen *pen)
 Config *config_create(SDL_Renderer *renderer)
 {
     Rule rules[] = {
-        {'F', "F+F-F-F+F"},
+        {.type = RULE_TYPE_STRING, 'F', .to.string="F+F-F-F+F"},
     };
     Config *config = xmalloc(sizeof(*config) + sizeof(rules));
     *config = (Config){
