@@ -33,6 +33,7 @@ Config *config_create(SDL_Renderer *renderer)
             {
                 .color = {255, 255, 255, SDL_ALPHA_OPAQUE},
                 .pos = {.x = 10, .y = 300},
+                .width = 1,
                 .rotation_rad = 0,
                 .down = true,
                 .renderer = renderer,

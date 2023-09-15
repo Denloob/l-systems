@@ -15,31 +15,32 @@ void pen_move_forward(Pen *pen, float amount)
     if (pen->down)
     {
         SDL_Color color = pen->color;
-        lineRGBA(pen->renderer, pen->pos.x, pen->pos.y, dest.x, dest.y, color.r,
-                 color.g, color.b, color.a);
+        thickLineRGBA(pen->renderer, pen->pos.x, pen->pos.y, dest.x, dest.y,
+                      pen->width, color.r, color.g, color.b, color.a);
     }
 
     pen->pos = dest;
 }
 
-void pen_position_save(Pen *pen)
+void pen_state_save(Pen *pen)
 {
-    PenPosition *position = xmalloc(sizeof(*position));
-    position->pos = pen->pos;
-    position->rotation_rad = pen->rotation_rad;
+    PenState *state = xmalloc(sizeof(*state));
+    state->pos = pen->pos;
+    state->width = pen->width;
+    state->rotation_rad = pen->rotation_rad;
 
-    stack_push(&pen->position_stack, position);
+    stack_push(&pen->position_stack, state);
 }
 
 void pen_position_restore(Pen *pen)
 {
-    PenPosition *position = stack_pop(&pen->position_stack);
-    SDL_assert_always(position != NULL &&
-                      "Restoring position from empty stack.");
-    pen->pos = position->pos;
-    pen->rotation_rad = position->rotation_rad;
+    PenState *state = stack_pop(&pen->position_stack);
+    SDL_assert_always(state != NULL && "Restoring position from empty stack.");
+    pen->pos = state->pos;
+    pen->width = state->width;
+    pen->rotation_rad = state->rotation_rad;
 
-    free(position);
+    free(state);
 }
 
 PenCommandRegistry pen_command_registry_create()

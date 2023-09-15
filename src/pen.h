@@ -6,9 +6,10 @@
 
 typedef struct PenPosition
 {
+    int width;
     SDL_FPoint pos;
     double rotation_rad;
-} PenPosition;
+} PenState;
 
 typedef struct Pen
 {
@@ -16,6 +17,7 @@ typedef struct Pen
                               NULL means empty.*/
     SDL_Renderer *renderer;
     SDL_FPoint pos;
+    double width;
     double rotation_rad; /* Pen rotation in radians.
                             0 is to the right.
                             Adding will rotate right.
@@ -38,7 +40,7 @@ void pen_move_forward(Pen *pen, float amount);
 /**
  * @brief Saves the current pen position onto the pen position stack.
  */
-void pen_position_save(Pen *pen);
+void pen_state_save(Pen *pen);
 
 /**
  * @brief Restores the pen position from the pen position stack.
