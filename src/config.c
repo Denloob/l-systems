@@ -1,40 +1,110 @@
 #include "SDL.h"
+#include "SDL_stdinc.h"
 #include "config.h"
 #include "l_system.h"
 #include "pen.h"
 #include "utils.h"
+#include <stdlib.h>
+#include <time.h>
 
-void forward(Pen *pen)
+#define ROTATION_RAD (M_PI_4 / 2.5 - M_PI / 180 * (rand() % 26 - 13))
+
+static int depth = 0;
+
+void leaf(Pen *pen)
 {
+    pen->width = 3;
+
+    switch (rand() % 3)
+    {
+        case 0:
+            pen->color = (SDL_Color){114, 107, 118, SDL_ALPHA_OPAQUE};
+            break;
+        case 1:
+            pen->color = (SDL_Color){124, 107, 148, SDL_ALPHA_OPAQUE};
+            break;
+        case 2:
+            pen->color = (SDL_Color){74, 87, 98, SDL_ALPHA_OPAQUE};
+            break;
+    }
+
     pen_move_forward(pen, 1);
+}
+
+void push(Pen *pen)
+{
+    pen_state_save(pen);
+    pen->width = SDL_max(pen->width * 0.7, 1);
+}
+
+void pop(Pen *pen)
+{
+    pen_state_restore(pen);
+}
+void internode(Pen *pen)
+{
+    pen->color = (SDL_Color){0, 0, 0, SDL_ALPHA_OPAQUE};
+    pen_move_forward(pen, 3);
 }
 
 void right(Pen *pen)
 {
-    pen->rotation_rad += M_PI_2;
+    pen->rotation_rad += ROTATION_RAD;
 }
 
 void left(Pen *pen)
 {
-    pen->rotation_rad -= M_PI_2;
+    pen->rotation_rad -= ROTATION_RAD;
+}
+
+void random_turn(Pen *pen)
+{
+    if (rand() % 2)
+        right(pen);
+    else
+        left(pen);
+}
+
+const char *increase_depth()
+{
+    depth++;
+    return "[";
+}
+
+const char *decrease_depth()
+{
+    depth--;
+    return "]";
+}
+
+const char *internode_rule()
+{
+    if (rand() % 100 < 45 && depth > 3)
+        return "G[^GL]";
+    else
+        return "G";
 }
 
 Config *config_create(SDL_Renderer *renderer)
 {
+    srand(time(NULL));
     Rule rules[] = {
-        {'F', "F-G"},
-        {'G', "F+G"},
+        {.type = RULE_TYPE_STRING,   'I', .to.string = "FI"},
+        {.type = RULE_TYPE_STRING,   'L', .to.string = "I[-FL][+L]"},
+        {.type = RULE_TYPE_FUNCTION, 'F', .to.func = internode_rule},
+        {.type = RULE_TYPE_FUNCTION, '[', .to.func = increase_depth},
+        {.type = RULE_TYPE_FUNCTION, ']', .to.func = decrease_depth},
     };
     Config *config = xmalloc(sizeof(*config) + sizeof(rules));
     *config = (Config){
-        .starting_string = "F",
-        .iterations = 16,
-        .background_color = {0, 0, 0, SDL_ALPHA_OPAQUE},
+        .starting_string = "GGGGL",
+        .iterations = 13,
+        .background_color = {255, 255, 255, SDL_ALPHA_OPAQUE},
         .pen =
             {
-                .color = {255, 255, 255, SDL_ALPHA_OPAQUE},
-                .pos = {.x = 150, .y = 300},
-                .rotation_rad = 0,
+                .pos = {.x = 250, .y = 500},
+                .width = 14,
+                .rotation_rad = -M_PI_2,
                 .down = true,
                 .renderer = renderer,
             },
@@ -45,10 +115,15 @@ Config *config_create(SDL_Renderer *renderer)
 
     memcpy(config->rules, rules, sizeof(rules));
 
-    pen_command_registry_add(config->registry, 'F', forward);
-    pen_command_registry_add(config->registry, 'G', forward);
-    pen_command_registry_add(config->registry, '+', left);
-    pen_command_registry_add(config->registry, '-', right);
+    pen_command_registry_add(config->registry, 'L', leaf);
+    pen_command_registry_add(config->registry, 'I', internode);
+    pen_command_registry_add(config->registry, 'F', internode);
+    pen_command_registry_add(config->registry, 'G', internode);
+    pen_command_registry_add(config->registry, '-', left);
+    pen_command_registry_add(config->registry, '^', random_turn);
+    pen_command_registry_add(config->registry, '+', right);
+    pen_command_registry_add(config->registry, '[', push);
+    pen_command_registry_add(config->registry, ']', pop);
 
     return config;
 }
