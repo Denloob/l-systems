@@ -26,7 +26,14 @@ typedef struct Pen
     bool down;
 } Pen;
 
+#define PEN_COMMAND_WITH_DATA /* You might want to remove it, if you don't need
+                                 the data on pen commands. */
+
+#ifdef PEN_COMMAND_WITH_DATA
+typedef void (*PenCommand)(Pen *pen, int data);
+#else
 typedef void (*PenCommand)(Pen *pen);
+#endif
 
 typedef PenCommand *PenCommandRegistry;
 
@@ -102,6 +109,7 @@ bool pen_command_registry_remove(PenCommandRegistry registry, char ch);
 bool pen_command_registry_set(PenCommandRegistry registry, char ch,
                               PenCommand command);
 
+#ifndef PEN_COMMAND_WITH_DATA
 /**
  * @brief Executes the pen commands using a given registry.
  *
@@ -111,3 +119,4 @@ bool pen_command_registry_set(PenCommandRegistry registry, char ch,
  */
 void pen_commands_execute(Pen *pen, const PenCommandRegistry registry,
                           const char *commands);
+#endif

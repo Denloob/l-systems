@@ -86,6 +86,7 @@ bool pen_command_registry_set(PenCommandRegistry registry, char ch,
     return true;
 }
 
+#ifndef PEN_COMMAND_WITH_DATA
 void pen_commands_execute(Pen *pen, const PenCommandRegistry registry,
                           const char *commands)
 {
@@ -98,3 +99,4 @@ void pen_commands_execute(Pen *pen, const PenCommandRegistry registry,
         }
     }
 }
+#endif
