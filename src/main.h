@@ -20,7 +20,7 @@
 void init_sdl(SDL_Window **window_ptr, SDL_Renderer **renderer_ptr);
 
 /**
- * @brief Destroys the given window and renderer.and quits SDL.
+ * @brief Destroys the given window and renderer and quits SDL.
  *
  * @param window The SDL window to destroy
  * @param renderer The SDL renderer to destroy
